@@ -121,6 +121,28 @@ public class Bocateria
     * @param id numero de cliente que se va
     */
    public void clienteAbandonaCola(int id){
+       //Primero buscamos el cliente con dicha id
+       if(primeraPersonaEnCola != null){
+           if(primeraPersonaEnCola.getNumeroCliente() == id){
+               //Si coincide que la primera persona es la buscada
+               primeraPersonaEnCola = primeraPersonaEnCola.getSiguienteEnLaCola();
+            }
+           else {
+              
+               Cliente apuntado = primeraPersonaEnCola;
+               boolean encontrado = false;
+               //Buscamos al cliente con esa id
+               while(!encontrado && apuntado != null){
+                   if(apuntado.getSiguienteEnLaCola().getNumeroCliente() == id){
+                       //Si la persona que está detras de él es el cliente buscado, esta persona pasa a apuntar a la siguiente
+                       apuntado.setSiguienteEnLaCola(apuntado.getSiguienteEnLaCola().getSiguienteEnLaCola());
+                       encontrado = true;
+                    }
+                    apuntado = apuntado.getSiguienteEnLaCola();
+                }
+            }
+        }
+       
     }
     
    /**
