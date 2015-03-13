@@ -61,12 +61,14 @@ public class Bocateria
     * Cobra al cliente Actual
     */
    public void despacharClienteActual(){
-       //Cobramos al cliente
-       facturacionActual += primeraPersonaEnCola.getNumeroDeBocadillos() * PRECIO_BOCADILLO;
-       //Incluimos al cliente en los clientes despachados
-       clientesDespachados.put(primeraPersonaEnCola.getNumeroCliente(), primeraPersonaEnCola);
-       //Desplazamos al segundo en la cola a la primera posicion
-       primeraPersonaEnCola = primeraPersonaEnCola.getSiguienteEnLaCola();
+       if(primeraPersonaEnCola != null){
+           //Cobramos al cliente
+           facturacionActual += primeraPersonaEnCola.getNumeroDeBocadillos() * PRECIO_BOCADILLO;
+           //Incluimos al cliente en los clientes despachados
+           clientesDespachados.put(primeraPersonaEnCola.getNumeroCliente(), primeraPersonaEnCola);
+           //Desplazamos al segundo en la cola a la primera posicion
+           primeraPersonaEnCola = primeraPersonaEnCola.getSiguienteEnLaCola();
+        }
     }
     
    /**
