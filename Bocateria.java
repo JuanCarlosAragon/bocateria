@@ -78,7 +78,7 @@ public class Bocateria
     */
    public void visualizaDatosBocateria(){
        System.out.println("Facturación actual: " + facturacionActual + " euros.");
-       System.out.println("Estadode la cola:");
+       System.out.println("Estado de la cola:");
        visualizaDatosClientesEnCola();
        System.out.println("Clientes despachados:");
        //Imprimimos todos los clientes ya despachados
@@ -96,8 +96,22 @@ public class Bocateria
     * @return posicion de esa persona en la cola
     */
    public int getPosicionPrimerClienteConMasBocadillos(){
-       int posicion = 0;
+       int posicion = -1;
        
+       if(primeraPersonaEnCola != null){
+           int maxBocadillos = primeraPersonaEnCola.getNumeroDeBocadillos();
+           int cont = 1;
+           posicion = 1;
+           Cliente buscado = primeraPersonaEnCola;
+           while(buscado.getSiguienteEnLaCola() != null){
+               cont++;
+               if(buscado.getSiguienteEnLaCola().getNumeroDeBocadillos() > maxBocadillos){
+                   maxBocadillos = buscado.getSiguienteEnLaCola().getNumeroDeBocadillos();
+                   posicion = cont;
+                }
+               buscado = buscado.getSiguienteEnLaCola();
+            }
+        }
        return posicion;
     }
     
@@ -114,6 +128,22 @@ public class Bocateria
     * 
     */
    public void ordenarColaPorNumeroDeBocadillos(){
+       int maxBocadillos = primeraPersonaEnCola.getNumeroDeBocadillos();
        
+       Cliente anteriorABuscado = null;
+       Cliente buscado = primeraPersonaEnCola;
+       while(buscado.getSiguienteEnLaCola() != null){
+           if(buscado.getSiguienteEnLaCola().getNumeroDeBocadillos() > maxBocadillos){
+               maxBocadillos = buscado.getSiguienteEnLaCola().getNumeroDeBocadillos();
+               anteriorABuscado = buscado;
+               buscado = buscado.getSiguienteEnLaCola();
+            }
+        }
+       //Una vez encontrado el cliente buscado, este debe pasar a apuntar al primero de la cola.
+       //el anterior debe apuntar al siguiente de buscado
+       //el primero de la cola pasa a ser buscado.
+       anteriorABuscado.setSiguienteEnLaCola(buscado.getSiguienteEnLaCola());
+       buscado.setSiguienteEnLaCola(primeraPersonaEnCola);
+       primeraPersonaEnCola = buscado;
     }
 }
