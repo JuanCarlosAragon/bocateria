@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.ArrayList;
 /**
  * Clase que define la administración de una bocateria
  * 
@@ -48,14 +49,16 @@ public class Bocateria
     * Muestra datos por pantalla de los clientes en cola
     */
    public void visualizaDatosClientesEnCola(){
-       System.out.println(primeraPersonaEnCola.toString() + "(" + (primeraPersonaEnCola.getNumeroDeBocadillos() * PRECIO_BOCADILLO) +
-                            " euros)");
+       if(primeraPersonaEnCola != null){
+           System.out.println(primeraPersonaEnCola.toString() + "(" + (primeraPersonaEnCola.getNumeroDeBocadillos() * PRECIO_BOCADILLO) +
+                             " euros)");
        
-       Cliente siguienteCliente = primeraPersonaEnCola.getSiguienteEnLaCola();
-       while(siguienteCliente != null){
-           System.out.println(siguienteCliente.toString()+ "(" + (siguienteCliente.getNumeroDeBocadillos() * PRECIO_BOCADILLO) +
-                            " euros)");
-           siguienteCliente = siguienteCliente.getSiguienteEnLaCola();
+           Cliente siguienteCliente = primeraPersonaEnCola.getSiguienteEnLaCola();
+           while(siguienteCliente != null){
+               System.out.println(siguienteCliente.toString()+ "(" + (siguienteCliente.getNumeroDeBocadillos() * PRECIO_BOCADILLO) +
+                             " euros)");
+               siguienteCliente = siguienteCliente.getSiguienteEnLaCola();
+            }
         }
     }
    
@@ -150,22 +153,36 @@ public class Bocateria
     * 
     */
    public void ordenarColaPorNumeroDeBocadillos(){
-       int maxBocadillos = primeraPersonaEnCola.getNumeroDeBocadillos();
+       ArrayList<Cliente> clientesOrdenados = new ArrayList();
        
-       Cliente anteriorABuscado = null;
-       Cliente buscado = primeraPersonaEnCola;
-       while(buscado.getSiguienteEnLaCola() != null){
-           if(buscado.getSiguienteEnLaCola().getNumeroDeBocadillos() > maxBocadillos){
-               maxBocadillos = buscado.getSiguienteEnLaCola().getNumeroDeBocadillos();
-               anteriorABuscado = buscado;
-               buscado = buscado.getSiguienteEnLaCola();
+       //Cogemos la persona con mas bocadillos
+       Cliente masBocadillos = primeraPersonaEnCola;
+       while(masBocadillos != null){
+           for(int i = 0; i<getPosicionPrimerClienteConMasBocadillos();i++){
+               masBocadillos = masBocadillos.getSiguienteEnLaCola();
+            }
+            //Añadimos a esa persona al arrayList
+            clientesOrdenados.add(masBocadillos);
+            //La borramos de la cola;
+            if(masBocadillos != null){
+                clienteAbandonaCola(masBocadillos.getNumeroCliente());
+            }
+       }
+       //En este punto tenemos un ArrayList con las personas que habia en cola por orden
+       //de bocadillos.
+       Cliente vacio = null;
+       for(int i = 0; i<clientesOrdenados.size(); i++){
+           //Hacemos que el primero de la cola apunte al siguiente y así sucesivamente
+           if((i+1)<clientesOrdenados.size()){
+               clientesOrdenados.get(i).setSiguienteEnLaCola(clientesOrdenados.get(i+1));
+            }
+            else{
+                if(clientesOrdenados.get(i) != null){
+                    clientesOrdenados.get(i).setSiguienteEnLaCola(vacio);
+                }
             }
         }
-       //Una vez encontrado el cliente buscado, este debe pasar a apuntar al primero de la cola.
-       //el anterior debe apuntar al siguiente de buscado
-       //el primero de la cola pasa a ser buscado.
-       anteriorABuscado.setSiguienteEnLaCola(buscado.getSiguienteEnLaCola());
-       buscado.setSiguienteEnLaCola(primeraPersonaEnCola);
-       primeraPersonaEnCola = buscado;
+       //Ahora cogemos al primero del ArrayList y lo colocamos en la primera posicion
+       primeraPersonaEnCola = clientesOrdenados.get(0);
     }
 }
