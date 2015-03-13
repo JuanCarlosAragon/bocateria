@@ -1,4 +1,6 @@
 import java.util.HashMap;
+import java.util.Collection;
+import java.util.Iterator;
 /**
  * Clase que define la administración de una bocateria
  * 
@@ -75,7 +77,15 @@ public class Bocateria
     * Muestra por pantalla los datos de la bocateria
     */
    public void visualizaDatosBocateria(){
-       String info = new String();
+       System.out.println("Facturación actual: " + facturacionActual + " euros.");
+       System.out.println("Estadode la cola:");
+       visualizaDatosClientesEnCola();
+       System.out.println("Clientes despachados:");
+       //Imprimimos todos los clientes ya despachados
+       Iterator<Cliente> it = clientesDespachados.values().iterator();
+       while(it.hasNext()){
+           System.out.println(it.next().toString());
+        }
        
        
     }
