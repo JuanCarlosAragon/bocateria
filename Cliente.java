@@ -60,9 +60,9 @@ public class Cliente
     * @return un String con las características del cliente
     */
    public String toString(){
-       String definicionCliente = null;
-       
-       return definicionCliente;
+       String infoCliente = "Cliente " + getNumeroCliente() + ": " + getNumeroDeBocadillos() +
+                            " bocadillo/s ";
+       return infoCliente;
     }
     
     /**

@@ -27,18 +27,32 @@ public class Bocateria
     * @param numeroDeBocadillos la cantidad de bocadillos que pide
     */
    public void llegaNuevoClienteALaCola(int numeroDeBocadillos){
-       primeraPersonaEnCola = new Cliente(numeroDeBocadillos);
+       if(primeraPersonaEnCola == null){
+           primeraPersonaEnCola = new Cliente(numeroDeBocadillos);
+        }
+        else{
+            //Seleccionamos la penultima persona en cola
+            Cliente penultimo = primeraPersonaEnCola;
+            while(penultimo.getSiguienteEnLaCola() != null){
+                penultimo = penultimo.getSiguienteEnLaCola();
+            }
+            //Añadimos a la ultima persona detras del penultimo
+            penultimo.setSiguienteEnLaCola(new Cliente(numeroDeBocadillos));
+        }
+       
     }
     
    /**
     * Muestra datos por pantalla de los clientes en cola
     */
    public void visualizaDatosClientesEnCola(){
-       System.out.println(primeraPersonaEnCola.toString());
+       System.out.println(primeraPersonaEnCola.toString() + "(" + (primeraPersonaEnCola.getNumeroDeBocadillos() * PRECIO_BOCADILLO) +
+                            " euros)");
        
        Cliente siguienteCliente = primeraPersonaEnCola.getSiguienteEnLaCola();
        while(siguienteCliente != null){
-           System.out.println(siguienteCliente.toString());
+           System.out.println(siguienteCliente.toString()+ "(" + (siguienteCliente.getNumeroDeBocadillos() * PRECIO_BOCADILLO) +
+                            " euros)");
            siguienteCliente = siguienteCliente.getSiguienteEnLaCola();
         }
     }
